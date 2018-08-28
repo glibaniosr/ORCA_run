@@ -26,6 +26,6 @@ Use -e to send an email to you in the end of the calculation if this option is c
 
 Only input is obligatory, default output = input-basename.out.
 
--a is to copy any additional files to the run directory. i.e. .gbw files to read molecular orbitals or .xyz files for multiple xyz structures runs. If you need **MORE** than one -a file, the multiple files **MUST** be specified between double quotesand separated by spaces. 
+-a is to copy any additional files to the run directory. i.e. .gbw files to read molecular orbitals or .xyz files for multiple xyz structures runs. If you need **MORE** than one -a file, the multiple files **MUST** be specified between double quotes and separated by spaces. 
 
 > -a "file1.gbw file2.xyz"
