@@ -16,7 +16,7 @@ Due to the user-friendly style, ORCA is considered to be a helpful tool not only
 
 ## Usage
 
-> orca_run -i input.inp -o output.out -p nprocs -m maxcore -a "file1.gbw file2.xyz" -e email@addres.com hostsender
+> orca_run -i input.inp -o output.out -p nprocs -m maxcore -a file1.gbw -e email@addres.com hostsender
 
 **Nprocs** is the number of processors to be used
 **Maxcore** is the ORCA maximum memory per core.
@@ -24,4 +24,5 @@ Use -e to send an email to you in the end of the calculation if this option is c
 Only input is obligatory, default output = input-basename.out.
 
 For multiple auxiliary files, use the -a option separating the file names with space and INSIDE double quotes:
+
 > -a "file1.gbw file2.xyz"
