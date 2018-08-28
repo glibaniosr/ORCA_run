@@ -1,4 +1,4 @@
-# ORCA_run
+# ORCA_run 1.0.0
 
 ORCA_run is a shell/bash script to help users run electronic structure calculations with ORCA software developed and maintained by prof. Frank Neese and coworkers at Max Planck Institute for Chemical Energy Conversion.
 
