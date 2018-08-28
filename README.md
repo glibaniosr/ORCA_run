@@ -19,10 +19,13 @@ Due to the user-friendly style, ORCA is considered to be a helpful tool not only
 > orca_run -i input.inp -o output.out -p nprocs -m maxcore -a file1.gbw -e email@addres.com hostsender
 
 **Nprocs** is the number of processors to be used
+
 **Maxcore** is the ORCA maximum memory per core.
+
 Use -e to send an email to you in the end of the calculation if this option is configured in your system.
+
 Only input is obligatory, default output = input-basename.out.
 
-For multiple auxiliary files, use the -a option separating the file names with space and INSIDE double quotes:
+-a is to copy any additional files to the run directory. i.e. .gbw files to read molecular orbitals or .xyz files for multiple xyz structures runs. If you need **MORE** than one -a file, the multiple files **MUST** be specified between double quotes and separated by spaces. 
 
 > -a "file1.gbw file2.xyz"
