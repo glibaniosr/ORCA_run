@@ -1,8 +1,12 @@
 # ORCA_run
 
+ORCA_run is a shell/bash script to help users run electronic structure calculations with ORCA software developed and maintained by prof. Frank Neese and coworkers at Max Planck Institute for Chemical Energy Conversion.
+
+It's official website can be acessed at: **https://orcaforum.cec.mpg.de**
+
 ## About ORCA software for eletronic structures calculations
 
-**The following text was taken from ORCA official website which can be acessed from: https://orcaforum.cec.mpg.de**
+**The following text was taken from ORCA official website above.**
 
 "The program ORCA is a modern electronic structure program package written by F. Neese, with contributions from many current and former coworkers and several collaborating groups. The binaries of ORCA are available free of charge for academic users for a variety of platforms.
 ORCA is a flexible, efficient and easy-to-use general purpose tool for quantum chemistry with specific emphasis on spectroscopic properties of open-shell molecules. It features a wide variety of standard quantum chemical methods ranging from semiempirical methods to DFT to single- and multireference correlated ab initio methods. It can also treat environmental and relativistic effects.
