@@ -5,7 +5,9 @@
 # Nprocs is the number of processors to be used
 # Maxcore is the ORCA maximum memory per core.
 # Use -mail to send an email to you in the end of the calculation if this option is configured in your system
-# -a is to copy any additional files to the run directory, as example, .gbw files to read molecular orbitals.
+# -a is to copy any additional files to the run directory, as example, .gbw files to read molecular orbitals
+# or .xyz files for multiple structures runs. If you need more than one -a file, the multiple files must be 
+# specified between double quotes like $ orca_run -i input.inp -a "file1.gbw file2.xyz"
 
 # PATH to orca, SET THIS
 ORCAPATH="/programs/orca-4.0.1/orca"
@@ -23,9 +25,12 @@ afile=""
 maxcore=""
 usage="SCRIPT USAGE:
 
-orca_run -i input.inp -o output.out -p nprocs -m maxcore -a moread.gbw -e email@addres.com hostsender
+orca_run -i input.inp -o output.out -p nprocs -m maxcore -a \"file1.gbw file2.xyz\" -e email@addres.com hostsender
 
-Only input is obligatory, default output = input-basename.out"
+Only input is obligatory, default output = input-basename.out
+For multiple auxiliary files, use the -a option separating the file names with space and INSIDE double quotes:
+
+-a \"file1.gbw file2.xyz\""
 
 # Input options, passing arguments
 while getopts i:o:p:a:e:m:h option
@@ -45,11 +50,12 @@ do
 			;;
 		m)	maxcore=${OPTARG};;
 		h | *) # Display help.
-			echo "$usage"
+			echo "${usage}"
 			exit 0
 		;;
 	esac
 done
+shift $((OPTIND-1))
 
 ### START and show what will be done ###
 echo "Orca will run on node $HOSTNAME in $DATE at $TIME with the following options" > ${input%.*}.nodes
@@ -60,7 +66,6 @@ echo "maxcore memory = $maxcore" >> ${input%.*}.nodes
 echo "extrafile = $afile" >> ${input%.*}.nodes
 echo "mail = $email send by host $hostsender" >> ${input%.*}.nodes
 echo "scrDIR = $RUNDIR" >> ${input%.*}.nodes
-
 
 #### Starting job script ####
 mkdir -p "${RUNDIR}"
@@ -74,7 +79,9 @@ if [ -n "$email" ]; then
 fi
 # Case there is extra files to copy
 if [ -n "$afile" ]; then
-	cp "${CALCDIR}/$afile" "${RUNDIR}"
+	for file in ${afile[@]}
+		do cp "${CALCDIR}"/${file} "${RUNDIR}"
+	done
 fi
 # Case no output is specified, output will be same input name with .out extension
 if [ -z "$output" ]; then
@@ -95,10 +102,16 @@ if [ -n "$maxcore" ]; then
 	echo "%maxcore $maxcore" | cat - $input > inputOR.temp && mv inputOR.temp $input
 fi
 
-#### Run the program itself and alert the user ####
-echo "Orca will run with command:
- nohup ${ORCAPATH} ${RUNDIR}/${input} > "${CALCDIR}"/$output
- Run directory = ${RUNDIR}"
+### Run the program itself and alert the user ####
+echo "
+If you need help try the option: orca_run.sh -h
+
+Run directory = ${RUNDIR}
+Orca will run with command:
+
+nohup ${ORCAPATH} ${RUNDIR}/${input} > "${CALCDIR}"/$output
+
+"
 nohup ${ORCAPATH} $input > "${CALCDIR}"/$output
 # Move old input file to a .new.inp file so user knows what changed
 mv $input $inputNEW
@@ -110,4 +123,3 @@ mv ${input%.*}* "${CALCDIR}/${input%.*}-runfiles"
 if [ -n "$email" ]; then
 	echo "echo	"ssh $USER@$hostsender "echo "The job $input has ended on $(hostname)." | mail -s "JOB_DONE!" $email" 
 fi
-

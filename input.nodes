@@ -1,0 +1,8 @@
+Orca will run on node SASKIA in 28-08-2018 at 15:07:58 with the following options
+input = input.inp
+output = 
+number of processors = 
+maxcore memory = 
+extrafile = file1 file2
+mail =  send by host 
+scrDIR = /scr/glibanio/orca/input-29508
