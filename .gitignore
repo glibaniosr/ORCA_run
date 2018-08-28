@@ -1,2 +1,6 @@
 
 ORCA_run.code-workspace
+*.nodes
+*.inp
+*.out
+*-runfiles
