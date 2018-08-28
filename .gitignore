@@ -4,3 +4,4 @@ ORCA_run.code-workspace
 *.inp
 *.out
 *-runfiles
+**.vscode
