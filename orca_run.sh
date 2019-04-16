@@ -11,8 +11,16 @@
 # or .xyz files for multiple structures runs. If you need more than one -a file, the multiple files must be 
 # specified between double quotes like $ orca_run -i input.inp -a "file1.gbw file2.xyz"
 
-# PATH to orca, SET THIS
-ORCAPATH="/programs/orca-4.0.1/orca"
+# PATH to orca
+# Case no output is specified, output will be same input name with .out extension
+if [ -z "$orca_dir" ]; then
+	echo "
+	You have to set the orca_dir variable with the ORCA directory in your enviromental variables (bash profile).
+	Example: export orca_dir=path/to/orca 
+	"
+	exit 0
+fi
+ORCAPATH=$orca_dir
 
 # Calculation directory
 CALCDIR="${PWD}"
