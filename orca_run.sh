@@ -20,7 +20,7 @@ if [ -z "$orca_dir" ]; then
 	"
 	exit 0
 fi
-ORCAPATH=$orca_dir
+ORCAPATH="$orca_dir/orca"
 
 # Calculation directory
 CALCDIR="${PWD}"
