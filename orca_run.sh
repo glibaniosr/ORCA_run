@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#by Gabriel L. S. Rodrigues
+
 # Script to run Orca quantum chemistry program, moving the temporary files to a scratch directory /scr/$USER
 
 # Nprocs is the number of processors to be used
@@ -18,7 +20,7 @@ if [ -z "$orca_dir" ]; then
 	"
 	exit 0
 fi
-ORCAPATH=$orca_dir/orca
+ORCAPATH="$orca_dir/orca"
 
 # Calculation directory
 CALCDIR="${PWD}"
