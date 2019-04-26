@@ -21,6 +21,8 @@ if [ -z "$orca_dir" ]; then
 	exit 0
 fi
 ORCAPATH="$orca_dir/orca"
+SCR="/scr/${USER}/orca"
+#SCR="$HOME/scr/orca"
 
 # Calculation directory
 CALCDIR="${PWD}"
@@ -49,7 +51,7 @@ do
 		i)	input=${OPTARG}
 			# New input to be placed in the runfiles folder to see modifications
 			inputNEW="${input%.*}.new.inp"
-			RUNDIR="/scr/${USER}/orca/${input%.*}-$$"
+			RUNDIR="${SCR}/${input%.*}-$$"
 			;;
 		o)	output=${OPTARG};;
 		p)	nprocs=${OPTARG};;
