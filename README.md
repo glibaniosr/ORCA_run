@@ -1,8 +1,8 @@
-# ORCA_run 1.0.0
+# ORCA_run
 
 ORCA_run is a shell/bash script to help users run electronic structure calculations with ORCA software developed and maintained by prof. Frank Neese and coworkers at Max Planck Institute for Chemical Energy Conversion.
 
-It's official website can be acessed at: **https://orcaforum.cec.mpg.de**
+It's official website can be acessed at: **https://orcaforum.kofo.mpg.de**
 
 ## About ORCA software for eletronic structures calculations
 
@@ -16,11 +16,17 @@ Due to the user-friendly style, ORCA is considered to be a helpful tool not only
 
 ## Usage
 
-> orca_run -i input.inp -o output.out -p nprocs -m maxcore -a file1.gbw -e email@addres.com hostsender
+To use ORCA_run, first you need to set the path to ORCA in the orca_dir enviroment variable. As example, you can export it in your .bash_profile:
 
-**Nprocs** is the number of processors to be used
+> export orca_dir="/path/to/orca"
 
-**Maxcore** is the ORCA maximum memory per core.
+Then, the command to run an ORCA job called from ORCA_run follows the syntax:
+
+> orca_run -i input.inp -o output.out -p nprocs -m maxcore -a file1.gbw -e email@address.com hostsender
+
+**nprocs** is the number of processors to be used
+
+**maxcore** is the ORCA maximum memory per core in MB.
 
 Use -e to send an email to you in the end of the calculation if this option is configured in your system.
 
