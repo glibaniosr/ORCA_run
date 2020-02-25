@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#by Gabriel L. S. Rodrigues
+#by Gabriel Libânio Silva Rodrigues
 
-# Script to run Orca quantum chemistry program, moving the temporary files to a scratch directory /scr/$USER
+# Script to run Orca quantum chemistry program, moving the temporary files to a scratch directory given by ${orca_scr}
 
 # Nprocs is the number of processors to be used
 # Maxcore is the ORCA maximum memory per core.
@@ -11,18 +11,27 @@
 # or .xyz files for multiple structures runs. If you need more than one -a file, the multiple files must be 
 # specified between double quotes like $ orca_run -i input.inp -a "file1.gbw file2.xyz"
 
-# PATH to orca
-# Case no output is specified, output will be same input name with .out extension
-if [ -z "$orca_dir" ]; then
+# orca_run variables
+if [ -z "${orca_dir}" ] || [ -z "${orca_src}" ] || [ -z "${orca_scr}" ]; then
 	echo "
-	You have to set the orca_dir variable with the ORCA directory in your enviromental variables (bash profile).
-	Example: export orca_dir=path/to/orca 
+	You have to set the orca_run enviroment variables (bash profile).
+	
+	- Dir variable = \$orca_dir
+	- Source variable = \$orca_src (source modules, variables and etc.)
+	- Scratch variable = \$orca_scr
+	
+	Example:
+	export orca_dir=path/to/orca 
+	export orca_src=path/to/source 
+	export orca_scr=path/to/scratch
+	
 	"
 	exit 0
 fi
-ORCAPATH="$orca_dir/orca"
-SCR="/scr/${USER}/orca"
-#SCR="$HOME/scr/orca"
+source ${orca_src}
+ORCAPATH=${orca_dir}
+ORCASCR=${orca_scr}
+
 
 # Calculation directory
 CALCDIR="${PWD}"
@@ -51,7 +60,7 @@ do
 		i)	input=${OPTARG}
 			# New input to be placed in the runfiles folder to see modifications
 			inputNEW="${input%.*}.new.inp"
-			RUNDIR="${SCR}/${input%.*}-$$"
+			RUNDIR="${ORCASCR}/${input%.*}-$$"
 			;;
 		o)	output=${OPTARG};;
 		p)	nprocs=${OPTARG};;
@@ -78,11 +87,6 @@ echo "maxcore memory = $maxcore" >> ${input%.*}.nodes
 echo "extrafile = $afile" >> ${input%.*}.nodes
 echo "mail = $email send by host $hostsender" >> ${input%.*}.nodes
 echo "scrDIR = $RUNDIR" >> ${input%.*}.nodes
-
-#### Starting job script ####
-mkdir -p "${RUNDIR}"
-cd "${RUNDIR}"
-cp "${CALCDIR}/$input" "${RUNDIR}" # Copy input to run dir
 
 ### Argument Cases ###
 # Alert if email will be sent
@@ -121,15 +125,33 @@ If you need help try the option: orca_run.sh -h
 Run directory = ${RUNDIR}
 Orca will run with command:
 
-nohup ${ORCAPATH} ${RUNDIR}/${input} > "${CALCDIR}"/$output
-
+nohup ${ORCAPATH}/orca ${RUNDIR}/${input} > "${CALCDIR}"/$output
 "
-nohup ${ORCAPATH} $input > "${CALCDIR}"/$output
-# Move old input file to a .new.inp file so user knows what changed
-mv $input $inputNEW
-## Finally, move the files from the calculation to their folder
-mkdir -p "${CALCDIR}/${input%.*}-runfiles"
-mv ${input%.*}* "${CALCDIR}/${input%.*}-runfiles"
+
+#### Starting job script ####
+mkdir -p "${RUNDIR}"
+cd "${RUNDIR}"
+cp "${CALCDIR}/$input" "${RUNDIR}" # Copy input to run dir
+
+###### RUN ORCA #######
+nohup ${ORCAPATH}/orca "${RUNDIR}/${input}" > "${CALCDIR}/${output}"
+
+# Do operation on final ORCA files
+for file in "${PWD}"; do
+        if [ -d "${file}" ]; then
+                ## Remove temporary files if they still exist
+                if [ "${file: -4}" == ".tmp" ]; then
+                        rm ${file}
+                fi
+                ## Move old input file to a .new.inp file so user knows what changed
+                mv ${input} ${inputNEW}
+                ## Finally, move the files from the calculation to their folder
+                mkdir -p "${CALCDIR}/${input%.*}-runfiles"
+                mv ${input%.*}* "${CALCDIR}/${input%.*}-runfiles"
+        else
+                echo "There are no ORCA files to move, check your calculation!"
+        fi
+done
 
 # If email was requested send it
 if [ -n "$email" ]; then
