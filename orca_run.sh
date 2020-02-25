@@ -32,7 +32,6 @@ source ${orca_src}
 ORCAPATH=${orca_dir}
 ORCASCR=${orca_scr}
 
-
 # Calculation directory
 CALCDIR="${PWD}"
 # Variables
